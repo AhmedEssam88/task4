@@ -6,16 +6,16 @@
         {
             while (true)
             {
-                
+
                 int choice;
                 if (!int.TryParse(Console.ReadLine(), out choice))
                 {
                     Console.WriteLine("Invalid number. Try again.");
                     continue;
                 }
-                bool isQuit = false;
+                bool isQuit = false, added;
                 int age, instructorId, courseId, studentId;
-                bool added;
+                string[] data;
 
                 do
                 {
@@ -24,7 +24,7 @@
                     Console.WriteLine("------------------------");
                     int choise = Convert.ToInt32(Console.ReadLine());
                     StudentManagerSchool school = new StudentManagerSchool();
-                    
+
                     switch (choise)
                     {
                         case 1:
@@ -35,13 +35,13 @@
                                 Console.WriteLine("Invalid input. Please enter id, name, and age separated by commas.");
                                 break;
                             }
-                            
+
                             try
                             {
-                                studentId = int.Parse(studentDetails[0].Trim()); 
-                                 age = int.Parse(studentDetails[2].Trim());  
+                                studentId = int.Parse(studentDetails[0].Trim());
+                                age = int.Parse(studentDetails[2].Trim());
                             }
-                            catch 
+                            catch
                             {
 
                                 Console.WriteLine("id and age must be integers.");
@@ -49,11 +49,11 @@
                             }
 
                             Student student = new Student(studentId, studentDetails[0].Trim(), age, new List<Course>());
-                             added = school.AddStudent(student);
+                            added = school.AddStudent(student);
                             if (added)
                                 Console.WriteLine("Student added.");
                             else
-                                Console.WriteLine("error in add student");  
+                                Console.WriteLine("error in add student");
                             break;
 
                         case 2:
@@ -64,11 +64,11 @@
                                 Console.WriteLine("Invalid input. Please enter id, name, and age separated by commas.");
                                 break;
                             }
-                           
+
                             try
                             {
                                 instructorId = int.Parse(instructorDetails[0].Trim());
-                                
+
                             }
                             catch
                             {
@@ -85,7 +85,7 @@
                             break;
                         case 3:
                             Console.WriteLine("Enter course as: courseId,title,instructorId");
-                            string[] data = Console.ReadLine().Split(',');
+                            data = Console.ReadLine().Split(',');
                             if (data.Length != 3)
                             {
                                 Console.WriteLine("Format must be: courseId,title,instructorId");
@@ -119,7 +119,7 @@
                                 Console.WriteLine("Instructor not found.");
                                 break;
                             }
-                            
+
                             Course course = new Course(courseId, data[1].Trim(), found);
                             bool AddCourse = school.AddCourse(course);
                             if (AddCourse)
@@ -129,14 +129,14 @@
                             break;
                         case 4:
                             Console.WriteLine("Enter: studentId,courseId");
-                            string[] data = Console.ReadLine().Split(',');
+                            data = Console.ReadLine().Split(',');
                             if (data.Length != 2)
                             {
                                 Console.WriteLine("Format must be: studentId,courseId");
                                 break;
                             }
 
-                          
+
                             try
                             {
                                 studentId = Convert.ToInt32(data[0].Trim());
@@ -147,25 +147,92 @@
                                 Console.WriteLine("IDs must be numbers.");
                                 break;
                             }
+                            break;
 
-                           
+
                         case 5:
-                            
+                            List<Student> allStudents = school.GetAllStudents();
+                            if (allStudents.Count == 0)
+                            {
+                                Console.WriteLine("No students found.");
+                                break;
+                            }
+                            foreach (var stud in allStudents)
+                            {
+                                Console.WriteLine(stud.PrintDetails());
+                            }
+
                             break;
                         case 6:
-                            
-                            break;
-                        case 7:
-                            
-                            break;
-                        case 8:
-                            
+                            List<Course> allCourses = school.GetAllCourses();
+                            if (allCourses.Count == 0)
+                            {
+                                Console.WriteLine("No courses found.");
+                                break;
+                            }
+                            foreach (var cour in allCourses)
+                            {
+                                Console.WriteLine(cour.PrintDetails());
+                            }
 
                             break;
-                        case 9:
-                           
+                        case 7:
+                            List<Instructor> allInstructors = school.GetAllInstructors();
+                            if (allInstructors.Count == 0)
+                            {
+                                Console.WriteLine("No instructors found.");
+                                break;
+                            }
+                            foreach (var inst in allInstructors)
+                            {
+                                Console.WriteLine(inst.PrintDetails());
+                            }
                             break;
-                      
+                        case 8:
+                            Console.WriteLine("Enter student id or name:");
+                            string input = Console.ReadLine().Trim();
+                            Student foundStudent = null;
+                            List<Student> students = school.GetAllStudents();
+                            foreach (var stud in students)
+                            {
+                                if (stud.Id.ToString() == input || stud.Name == input)
+                                {
+                                    foundStudent = stud;
+                                    break;
+                                }
+                            }
+                            if (foundStudent != null)
+                            {
+                                Console.WriteLine("Student found: " + foundStudent.PrintDetails());
+                            }
+                            else
+                            {
+                                Console.WriteLine("Student not found.");
+                            }
+                            break;
+                        case 9:
+                            Console.WriteLine("Enter course id or title:");
+                            string courseInput = Console.ReadLine().Trim();
+                            Course foundCourse = null;
+                            List<Course> courses = school.GetAllCourses();
+                            foreach (var cour in courses)
+                            {
+                                if (cour.Id.ToString() == courseInput || cour.Title == courseInput)
+                                {
+                                    foundCourse = cour;
+                                    break;
+                                }
+                            }
+                            if (foundCourse != null)
+                            {
+                                Console.WriteLine("Course found: " + foundCourse.PrintDetails());
+                            }
+                            else
+                            {
+                                Console.WriteLine("Course not found.");
+                            }
+                            break;
+
                         case 10:
                             Console.WriteLine("quit");
                             isQuit = true;
