@@ -6,16 +6,9 @@
         static void Main(string[] args)
         {
             while (true)
-            {
-
-                int choice;
-                if (!int.TryParse(Console.ReadLine(), out choice))
-                {
-                    Console.WriteLine("Invalid number. Try again.");
-                    continue;
-                }
+            {                
                 bool isQuit = false, added;
-                int age, instructorId, courseId, studentId;
+                int age, instructorId, courseId, studentId,choice;
                 string[] data;
 
                 do
